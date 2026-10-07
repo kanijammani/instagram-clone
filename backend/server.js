@@ -65,10 +65,23 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/stories', require('./routes/storyRoutes.js'));
 app.use('/api/ai', require('./routes/aiRoutes.js'));
 
-app.get('/', (req, res) => {
-    res.send('Instagram Clone API is running...');
-});
+// Serve static frontend in production for single URL deployment
+const path = require('path');
+const frontendDist = path.join(__dirname, '../frontend/dist');
+const fs = require('fs');
 
-const PORT = process.env.PORT || 5000;
+if (fs.existsSync(frontendDist)) {
+    app.use(express.static(frontendDist));
+    app.get('*', (req, res, next) => {
+        if (req.path.startsWith('/api')) return next();
+        res.sendFile(path.resolve(frontendDist, 'index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.send('Instagram Clone API is running...');
+    });
+}
+
+const PORT = process.env.PORT || 5001;
 
 server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
