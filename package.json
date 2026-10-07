@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Instagram Clone Full-stack single service deployment",
   "scripts": {
-    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "build": "cd backend && npm install --legacy-peer-deps && cd ../frontend && npm install --legacy-peer-deps && npm run build",
     "start": "cd backend && node server.js"
   }
 }
